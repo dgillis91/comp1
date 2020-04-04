@@ -1,26 +1,13 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 import argparse
-from readers import FileReaderDriver, KeyboardReaderDriver
-
+from fsa import initialize_scanner
 
 parser = argparse.ArgumentParser()
-parser.add_argument('path', nargs='?', help='path to file. do not include ext. defaults to read from keyboard')
+parser.add_argument('path', help='path to file. do not include ext.')
 args = parser.parse_args()
 
-if args.path is None:
-    print('reading from keybaord. press CTRL+D to stop')
-    driver = KeyboardReaderDriver()
-    tree = driver.parse()
-else:
-    driver = FileReaderDriver(args.path)
-    tree = driver.parse_file()
 
-print('***printing preorder***')
-tree.print_preorder()
-
-print('***printing postorder***')
-tree.print_postorder()
-
-print('***printing inorder***')
-tree.print_inorder()
+scanner = initialize_scanner(args.path)
+for token in scanner.get_token():
+    print(token)
